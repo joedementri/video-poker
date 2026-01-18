@@ -55,6 +55,9 @@ h1 {
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .game-btn:hover {
