@@ -116,6 +116,13 @@ h1 {
     text-align: center;
     font-size: 2.2rem;
     font-weight: 600;
+    letter-spacing: 0.06em;
+}
+
+.card__center--joker {
+    font-size: 1.4rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 .card__label {

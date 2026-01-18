@@ -38,7 +38,12 @@
             { label: "3", value: 3 },
             { label: "2", value: 2 },
         ];
-        const jokers = ["Red Joker", "Black Joker", "Red Joker", "Black Joker"];
+        const jokers = [
+            { label: "Spade Joker", symbol: "♠", color: "black" },
+            { label: "Heart Joker", symbol: "♥", color: "red" },
+            { label: "Diamond Joker", symbol: "♦", color: "red" },
+            { label: "Club Joker", symbol: "♣", color: "black" },
+        ];
 
         const grid = document.getElementById("card-grid");
 
@@ -56,7 +61,7 @@
             corner.className = "card__corner";
             corner.innerHTML = `${rankLabel}<span>${suitSymbol}</span>`;
             const center = document.createElement("div");
-            center.className = "card__center";
+            center.className = isJoker ? "card__center card__center--joker" : "card__center";
             center.textContent = isJoker ? "JOKER" : suitSymbol;
             const label = document.createElement("div");
             label.className = "card__label";
@@ -83,12 +88,11 @@
         });
 
         jokers.forEach((joker, index) => {
-            const isRed = joker.startsWith("Red");
             const card = createCard({
                 rankLabel: "★",
-                suitLabel: joker,
-                suitSymbol: isRed ? "♥" : "♣",
-                color: isRed ? "red" : "black",
+                suitLabel: joker.label,
+                suitSymbol: joker.symbol,
+                color: joker.color,
                 isJoker: true,
             });
             card.dataset.jokerIndex = index + 1;
