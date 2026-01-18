@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Poker Lab · Card Dev Deck</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dev-page">
+    <div class="container">
+        <h1>🂡 Card Dev Deck</h1>
+        <p class="subtitle">
+            Secret development page for reviewing all 52 cards plus jokers.
+        </p>
+        <div id="card-grid" class="card-grid"></div>
+        <div class="footer">Not linked from the main site.</div>
+    </div>
+
+    <script>
+        const suits = [
+            { label: "Spades", symbol: "♠", color: "black" },
+            { label: "Hearts", symbol: "♥", color: "red" },
+            { label: "Diamonds", symbol: "♦", color: "red" },
+            { label: "Clubs", symbol: "♣", color: "black" },
+        ];
+        const ranks = [
+            { label: "A", value: 14 },
+            { label: "K", value: 13 },
+            { label: "Q", value: 12 },
+            { label: "J", value: 11 },
+            { label: "10", value: 10 },
+            { label: "9", value: 9 },
+            { label: "8", value: 8 },
+            { label: "7", value: 7 },
+            { label: "6", value: 6 },
+            { label: "5", value: 5 },
+            { label: "4", value: 4 },
+            { label: "3", value: 3 },
+            { label: "2", value: 2 },
+        ];
+        const jokers = ["Red Joker", "Black Joker", "Red Joker", "Black Joker"];
+
+        const grid = document.getElementById("card-grid");
+
+        const createCard = ({ rankLabel, suitLabel, suitSymbol, color, isJoker }) => {
+            const card = document.createElement("div");
+            const classes = ["card"];
+            if (color === "red") {
+                classes.push("card--red");
+            }
+            if (isJoker) {
+                classes.push("card--joker");
+            }
+            card.className = classes.join(" ");
+            const corner = document.createElement("div");
+            corner.className = "card__corner";
+            corner.innerHTML = `${rankLabel}<span>${suitSymbol}</span>`;
+            const center = document.createElement("div");
+            center.className = "card__center";
+            center.textContent = isJoker ? "JOKER" : suitSymbol;
+            const label = document.createElement("div");
+            label.className = "card__label";
+            label.textContent = suitLabel;
+            const bottomCorner = document.createElement("div");
+            bottomCorner.className = "card__corner card__corner--bottom";
+            bottomCorner.innerHTML = `${rankLabel}<span>${suitSymbol}</span>`;
+
+            card.append(corner, center, label, bottomCorner);
+            return card;
+        };
+
+        suits.forEach((suit) => {
+            ranks.forEach((rank) => {
+                const card = createCard({
+                    rankLabel: rank.label,
+                    suitLabel: suit.label,
+                    suitSymbol: suit.symbol,
+                    color: suit.color,
+                    isJoker: false,
+                });
+                grid.appendChild(card);
+            });
+        });
+
+        jokers.forEach((joker, index) => {
+            const isRed = joker.startsWith("Red");
+            const card = createCard({
+                rankLabel: "★",
+                suitLabel: joker,
+                suitSymbol: isRed ? "♥" : "♣",
+                color: isRed ? "red" : "black",
+                isJoker: true,
+            });
+            card.dataset.jokerIndex = index + 1;
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
