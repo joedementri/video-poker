@@ -27,11 +27,24 @@ body {
   padding: 24px;
 }
 
+.layout-grid {
+  width: min(1600px, 100%);
+  display: grid;
+  grid-template-columns: minmax(40px, 1fr) minmax(860px, 2fr) minmax(260px, 0.9fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.spacer {
+  min-height: 1px;
+}
+
 .table-wrap {
-  width: min(1100px, 100%);
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  justify-self: center;
 }
 
 .paytable {
@@ -96,6 +109,7 @@ body {
   grid-template-columns: repeat(5, minmax(120px, 1fr));
   gap: 22px;
   justify-items: center;
+  padding-bottom: 16px;
 }
 
 .card {
@@ -198,7 +212,7 @@ body {
 
 .best-label {
   position: absolute;
-  bottom: -26px;
+  bottom: -34px;
   left: 50%;
   transform: translateX(-50%);
   color: #74c7ff;
@@ -266,6 +280,54 @@ body {
   gap: 10px;
 }
 
+.stats-panel {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--gold-deep);
+  border-radius: 14px;
+  padding: 18px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stats-panel h2,
+.stats-panel h3 {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "ITC Bookman", "Bookman Old Style", "Bookman", "Palatino Linotype", serif;
+  color: var(--gold);
+}
+
+.stats-panel h3 {
+  margin-top: 18px;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-row span:last-child {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.stats-reset {
+  margin-top: 6px;
+}
+
 .btn {
   padding: 12px 18px;
   border-radius: 10px;
@@ -293,6 +355,18 @@ body {
 }
 
 @media (max-width: 900px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .stats-panel {
+    order: 3;
+  }
+
   .cards-row {
     grid-template-columns: repeat(2, minmax(130px, 1fr));
   }

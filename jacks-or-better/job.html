@@ -7,173 +7,202 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="table-wrap">
-    <section class="paytable">
-      <table id="payTable">
-        <thead>
-          <tr>
-            <th>Bet Amount</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Royal Flush</td>
-            <td>250</td>
-            <td>500</td>
-            <td>750</td>
-            <td>1000</td>
-            <td>4000</td>
-          </tr>
-          <tr>
-            <td>Straight Flush</td>
-            <td>50</td>
-            <td>100</td>
-            <td>150</td>
-            <td>200</td>
-            <td>250</td>
-          </tr>
-          <tr>
-            <td>Four of a Kind</td>
-            <td>25</td>
-            <td>50</td>
-            <td>75</td>
-            <td>100</td>
-            <td>125</td>
-          </tr>
-          <tr>
-            <td>Full House</td>
-            <td>9</td>
-            <td>18</td>
-            <td>27</td>
-            <td>36</td>
-            <td>45</td>
-          </tr>
-          <tr>
-            <td>Flush</td>
-            <td>6</td>
-            <td>12</td>
-            <td>18</td>
-            <td>24</td>
-            <td>30</td>
-          </tr>
-          <tr>
-            <td>Straight</td>
-            <td>4</td>
-            <td>8</td>
-            <td>12</td>
-            <td>16</td>
-            <td>20</td>
-          </tr>
-          <tr>
-            <td>Three of a Kind</td>
-            <td>3</td>
-            <td>6</td>
-            <td>9</td>
-            <td>12</td>
-            <td>15</td>
-          </tr>
-          <tr>
-            <td>Two Pair</td>
-            <td>2</td>
-            <td>4</td>
-            <td>6</td>
-            <td>8</td>
-            <td>10</td>
-          </tr>
-          <tr>
-            <td>Jacks or Better</td>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+  <main class="layout-grid">
+    <div class="spacer"></div>
+    <div class="table-wrap">
+      <section class="paytable">
+        <table id="payTable">
+          <thead>
+            <tr>
+              <th>Bet Amount</th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Royal Flush</td>
+              <td>250</td>
+              <td>500</td>
+              <td>750</td>
+              <td>1000</td>
+              <td>4000</td>
+            </tr>
+            <tr>
+              <td>Straight Flush</td>
+              <td>50</td>
+              <td>100</td>
+              <td>150</td>
+              <td>200</td>
+              <td>250</td>
+            </tr>
+            <tr>
+              <td>Four of a Kind</td>
+              <td>25</td>
+              <td>50</td>
+              <td>75</td>
+              <td>100</td>
+              <td>125</td>
+            </tr>
+            <tr>
+              <td>Full House</td>
+              <td>9</td>
+              <td>18</td>
+              <td>27</td>
+              <td>36</td>
+              <td>45</td>
+            </tr>
+            <tr>
+              <td>Flush</td>
+              <td>6</td>
+              <td>12</td>
+              <td>18</td>
+              <td>24</td>
+              <td>30</td>
+            </tr>
+            <tr>
+              <td>Straight</td>
+              <td>4</td>
+              <td>8</td>
+              <td>12</td>
+              <td>16</td>
+              <td>20</td>
+            </tr>
+            <tr>
+              <td>Three of a Kind</td>
+              <td>3</td>
+              <td>6</td>
+              <td>9</td>
+              <td>12</td>
+              <td>15</td>
+            </tr>
+            <tr>
+              <td>Two Pair</td>
+              <td>2</td>
+              <td>4</td>
+              <td>6</td>
+              <td>8</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td>Jacks or Better</td>
+              <td>1</td>
+              <td>2</td>
+              <td>3</td>
+              <td>4</td>
+              <td>5</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
-    <section class="hand-name" id="handName"></section>
+      <section class="hand-name" id="handName"></section>
 
-    <section class="cards-row" id="cardsRow">
-      <button class="card" data-index="0" type="button" aria-label="Card 1">
-        <span class="held-label">HELD</span>
-        <span class="card-inner">
-          <span class="card-front">
-            <span class="rank"></span>
-            <span class="suit"></span>
+      <section class="cards-row" id="cardsRow">
+        <button class="card" data-index="0" type="button" aria-label="Card 1">
+          <span class="held-label">HELD</span>
+          <span class="card-inner">
+            <span class="card-front">
+              <span class="rank"></span>
+              <span class="suit"></span>
+            </span>
+            <span class="card-back"></span>
           </span>
-          <span class="card-back"></span>
-        </span>
-        <span class="best-label">BEST HOLD</span>
-      </button>
-      <button class="card" data-index="1" type="button" aria-label="Card 2">
-        <span class="held-label">HELD</span>
-        <span class="card-inner">
-          <span class="card-front">
-            <span class="rank"></span>
-            <span class="suit"></span>
+          <span class="best-label">BEST HOLD</span>
+        </button>
+        <button class="card" data-index="1" type="button" aria-label="Card 2">
+          <span class="held-label">HELD</span>
+          <span class="card-inner">
+            <span class="card-front">
+              <span class="rank"></span>
+              <span class="suit"></span>
+            </span>
+            <span class="card-back"></span>
           </span>
-          <span class="card-back"></span>
-        </span>
-        <span class="best-label">BEST HOLD</span>
-      </button>
-      <button class="card" data-index="2" type="button" aria-label="Card 3">
-        <span class="held-label">HELD</span>
-        <span class="card-inner">
-          <span class="card-front">
-            <span class="rank"></span>
-            <span class="suit"></span>
+          <span class="best-label">BEST HOLD</span>
+        </button>
+        <button class="card" data-index="2" type="button" aria-label="Card 3">
+          <span class="held-label">HELD</span>
+          <span class="card-inner">
+            <span class="card-front">
+              <span class="rank"></span>
+              <span class="suit"></span>
+            </span>
+            <span class="card-back"></span>
           </span>
-          <span class="card-back"></span>
-        </span>
-        <span class="best-label">BEST HOLD</span>
-      </button>
-      <button class="card" data-index="3" type="button" aria-label="Card 4">
-        <span class="held-label">HELD</span>
-        <span class="card-inner">
-          <span class="card-front">
-            <span class="rank"></span>
-            <span class="suit"></span>
+          <span class="best-label">BEST HOLD</span>
+        </button>
+        <button class="card" data-index="3" type="button" aria-label="Card 4">
+          <span class="held-label">HELD</span>
+          <span class="card-inner">
+            <span class="card-front">
+              <span class="rank"></span>
+              <span class="suit"></span>
+            </span>
+            <span class="card-back"></span>
           </span>
-          <span class="card-back"></span>
-        </span>
-        <span class="best-label">BEST HOLD</span>
-      </button>
-      <button class="card" data-index="4" type="button" aria-label="Card 5">
-        <span class="held-label">HELD</span>
-        <span class="card-inner">
-          <span class="card-front">
-            <span class="rank"></span>
-            <span class="suit"></span>
+          <span class="best-label">BEST HOLD</span>
+        </button>
+        <button class="card" data-index="4" type="button" aria-label="Card 5">
+          <span class="held-label">HELD</span>
+          <span class="card-inner">
+            <span class="card-front">
+              <span class="rank"></span>
+              <span class="suit"></span>
+            </span>
+            <span class="card-back"></span>
           </span>
-          <span class="card-back"></span>
-        </span>
-        <span class="best-label">BEST HOLD</span>
-      </button>
-    </section>
+          <span class="best-label">BEST HOLD</span>
+        </button>
+      </section>
 
-    <section class="status-row">
-      <div class="win-display" id="winDisplay">WIN $0</div>
-      <div class="bet-area">
-        <div class="bet-units" id="betUnitsLabel">BET 1</div>
-        <button class="btn gold" id="denomBtn" type="button">DENOM $1</button>
+      <section class="status-row">
+        <div class="win-display" id="winDisplay">WIN $0</div>
+        <div class="bet-area">
+          <div class="bet-units" id="betUnitsLabel">BET 1</div>
+          <button class="btn gold" id="denomBtn" type="button">DENOM $1</button>
+        </div>
+        <div class="bankroll-display" id="bankrollDisplay">BANKROLL $100.00</div>
+      </section>
+
+      <section class="controls-row">
+        <div class="control-stack">
+          <button class="btn gold" id="speedBtn" type="button">SPEED: SLOW</button>
+          <button class="btn gold" id="bestPlayBtn" type="button">SHOW BEST PLAY</button>
+        </div>
+        <button class="btn gold" id="betUpBtn" type="button">BET UP</button>
+        <button class="btn gold" id="dealBtn" type="button">DEAL</button>
+      </section>
+    </div>
+
+    <aside class="stats-panel" id="statsPanel">
+      <h2>Run Stats</h2>
+      <div class="stats-list">
+        <div class="stat-row"><span>Hands Played</span><span id="statHands">0</span></div>
+        <div class="stat-row"><span>Total Wagered</span><span id="statWagered">$0.00</span></div>
+        <div class="stat-row"><span>Total Won</span><span id="statWon">$0.00</span></div>
+        <div class="stat-row"><span>Total Loss</span><span id="statLoss">$0.00</span></div>
+        <div class="stat-row"><span>Net</span><span id="statNet">$0.00</span></div>
+        <div class="stat-row"><span>RTP%</span><span id="statRtp">0.00%</span></div>
+        <div class="stat-row"><span>Current Streak</span><span id="statStreak">-</span></div>
       </div>
-      <div class="bankroll-display" id="bankrollDisplay">BANKROLL $100.00</div>
-    </section>
-
-    <section class="controls-row">
-      <div class="control-stack">
-        <button class="btn gold" id="speedBtn" type="button">SPEED: SLOW</button>
-        <button class="btn gold" id="bestPlayBtn" type="button">SHOW BEST PLAY</button>
+      <h3>Hand Counts</h3>
+      <div class="stats-list">
+        <div class="stat-row"><span>Royal Flush</span><span id="statRoyalFlush">0</span></div>
+        <div class="stat-row"><span>Straight Flush</span><span id="statStraightFlush">0</span></div>
+        <div class="stat-row"><span>Four of a Kind</span><span id="statFourKind">0</span></div>
+        <div class="stat-row"><span>Full House</span><span id="statFullHouse">0</span></div>
+        <div class="stat-row"><span>Flush</span><span id="statFlush">0</span></div>
+        <div class="stat-row"><span>Straight</span><span id="statStraight">0</span></div>
+        <div class="stat-row"><span>Three of a Kind</span><span id="statTrips">0</span></div>
+        <div class="stat-row"><span>Two Pair</span><span id="statTwoPair">0</span></div>
+        <div class="stat-row"><span>Jacks or Better</span><span id="statJacks">0</span></div>
       </div>
-      <button class="btn gold" id="betUpBtn" type="button">BET UP</button>
-      <button class="btn gold" id="dealBtn" type="button">DEAL</button>
-    </section>
+      <button class="btn gold stats-reset" id="resetStatsBtn" type="button">RESET STATS</button>
+    </aside>
   </main>
 
   <script src="game.js"></script>

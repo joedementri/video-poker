@@ -31,17 +31,49 @@ const betUpBtn = document.getElementById("betUpBtn");
 const dealBtn = document.getElementById("dealBtn");
 const cardButtons = Array.from(document.querySelectorAll(".card"));
 const payTableEl = document.getElementById("payTable");
+const statHandsEl = document.getElementById("statHands");
+const statWageredEl = document.getElementById("statWagered");
+const statWonEl = document.getElementById("statWon");
+const statLossEl = document.getElementById("statLoss");
+const statNetEl = document.getElementById("statNet");
+const statRtpEl = document.getElementById("statRtp");
+const statStreakEl = document.getElementById("statStreak");
+const statRoyalFlushEl = document.getElementById("statRoyalFlush");
+const statStraightFlushEl = document.getElementById("statStraightFlush");
+const statFourKindEl = document.getElementById("statFourKind");
+const statFullHouseEl = document.getElementById("statFullHouse");
+const statFlushEl = document.getElementById("statFlush");
+const statStraightEl = document.getElementById("statStraight");
+const statTripsEl = document.getElementById("statTrips");
+const statTwoPairEl = document.getElementById("statTwoPair");
+const statJacksEl = document.getElementById("statJacks");
+const resetStatsBtn = document.getElementById("resetStatsBtn");
 
 let deck = [];
 let hand = [];
 let held = [false, false, false, false, false];
 let phase = "idle";
 let betUnits = 1;
-let denomIndex = 0;
-const denomOptions = [1, 5, 10, 25];
+let denomIndex = 2;
+const denomOptions = [0.25, 0.5, 1, 5, 10, 25];
 let bankroll = 100;
 let flipSpeed = 450;
 let showBestPlay = false;
+let handsPlayed = 0;
+let totalWagered = 0;
+let totalWon = 0;
+let winStreak = 0;
+const handCounts = {
+  "Royal Flush": 0,
+  "Straight Flush": 0,
+  "Four of a Kind": 0,
+  "Full House": 0,
+  Flush: 0,
+  Straight: 0,
+  "Three of a Kind": 0,
+  "Two Pair": 0,
+  "Jacks or Better": 0,
+};
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -139,7 +171,9 @@ const updateBankroll = () => {
 
 const updateBetDisplay = () => {
   betUnitsLabelEl.textContent = `BET ${betUnits}`;
-  denomBtn.textContent = `DENOM $${denomOptions[denomIndex]}`;
+  const denomValue = denomOptions[denomIndex];
+  const denomLabel = denomValue < 1 ? denomValue.toFixed(2) : denomValue;
+  denomBtn.textContent = `DENOM $${denomLabel}`;
   if (payTableEl) {
     payTableEl.dataset.bet = String(betUnits);
   }
@@ -154,6 +188,41 @@ const updateWinDisplay = (amount) => {
 
 const updateHandName = (handLabel) => {
   handNameEl.textContent = handLabel || "";
+};
+
+const updateStatsDisplay = () => {
+  const totalLoss = Math.max(0, totalWagered - totalWon);
+  const net = totalWon - totalWagered;
+  const rtp = totalWagered > 0 ? (totalWon / totalWagered) * 100 : 0;
+  const streakLabel = winStreak === 0 ? "-" : winStreak > 0 ? `W${winStreak}` : `L${Math.abs(winStreak)}`;
+
+  if (statHandsEl) statHandsEl.textContent = handsPlayed;
+  if (statWageredEl) statWageredEl.textContent = `$${formatMoney(totalWagered)}`;
+  if (statWonEl) statWonEl.textContent = `$${formatMoney(totalWon)}`;
+  if (statLossEl) statLossEl.textContent = `$${formatMoney(totalLoss)}`;
+  if (statNetEl) statNetEl.textContent = `$${formatMoney(net)}`;
+  if (statRtpEl) statRtpEl.textContent = `${rtp.toFixed(2)}%`;
+  if (statStreakEl) statStreakEl.textContent = streakLabel;
+  if (statRoyalFlushEl) statRoyalFlushEl.textContent = handCounts["Royal Flush"];
+  if (statStraightFlushEl) statStraightFlushEl.textContent = handCounts["Straight Flush"];
+  if (statFourKindEl) statFourKindEl.textContent = handCounts["Four of a Kind"];
+  if (statFullHouseEl) statFullHouseEl.textContent = handCounts["Full House"];
+  if (statFlushEl) statFlushEl.textContent = handCounts.Flush;
+  if (statStraightEl) statStraightEl.textContent = handCounts.Straight;
+  if (statTripsEl) statTripsEl.textContent = handCounts["Three of a Kind"];
+  if (statTwoPairEl) statTwoPairEl.textContent = handCounts["Two Pair"];
+  if (statJacksEl) statJacksEl.textContent = handCounts["Jacks or Better"];
+};
+
+const resetStats = () => {
+  handsPlayed = 0;
+  totalWagered = 0;
+  totalWon = 0;
+  winStreak = 0;
+  Object.keys(handCounts).forEach((key) => {
+    handCounts[key] = 0;
+  });
+  updateStatsDisplay();
 };
 
 const setFlipSpeed = (speed) => {
@@ -344,6 +413,7 @@ const handleDeal = async () => {
   }
 
   bankroll -= wager;
+  totalWagered += wager;
   updateBankroll();
   updateWinDisplay(0);
   updateHandName("");
@@ -388,10 +458,19 @@ const handleDraw = async () => {
   const payoutUnits = PAY_TABLE[result] ? PAY_TABLE[result][betUnits - 1] : 0;
   const payout = payoutUnits * denomOptions[denomIndex];
   bankroll += payout;
+  totalWon += payout;
   updateBankroll();
   updateWinDisplay(payout);
   updateHandName(payout > 0 ? result : "");
   clearBestHolds();
+  handsPlayed += 1;
+  handCounts[result] += 1;
+  if (payout > 0) {
+    winStreak = winStreak >= 0 ? winStreak + 1 : 1;
+  } else {
+    winStreak = winStreak <= 0 ? winStreak - 1 : -1;
+  }
+  updateStatsDisplay();
 
   phase = "drawn";
   dealBtn.textContent = "DEAL";
@@ -439,6 +518,10 @@ bestPlayBtn.addEventListener("click", () => {
   updateBestPlay();
 });
 
+resetStatsBtn.addEventListener("click", () => {
+  resetStats();
+});
+
 dealBtn.addEventListener("click", () => {
   handleDeal();
 });
@@ -447,3 +530,4 @@ setFlipSpeed(450);
 updateBetDisplay();
 updateBankroll();
 updateWinDisplay(0);
+updateStatsDisplay();
