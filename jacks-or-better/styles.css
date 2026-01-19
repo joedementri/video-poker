@@ -229,7 +229,7 @@ body {
 
 .status-row {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 22px;
 }
@@ -252,6 +252,16 @@ body {
 
 .bankroll-display {
   text-align: right;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  justify-self: end;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .bet-area {
@@ -326,6 +336,80 @@ body {
 
 .stats-reset {
   margin-top: 6px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+  z-index: 1000;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: rgba(8, 12, 20, 0.95);
+  border: 2px solid var(--gold-deep);
+  border-radius: 12px;
+  padding: 20px 24px;
+  width: min(360px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--white);
+  text-align: center;
+}
+
+.modal h2 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "ITC Bookman", "Bookman Old Style", "Bookman", "Palatino Linotype", serif;
+  color: var(--gold);
+}
+
+.modal-label {
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.modal-input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #101723;
+  color: var(--white);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.modal-error {
+  color: #e14a4a;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  min-height: 1rem;
+  transition: opacity 120ms ease;
+  text-transform: uppercase;
+}
+
+.modal-error.is-visible {
+  opacity: 1;
+}
+
+.modal-confirm {
+  align-self: center;
+  width: 100%;
 }
 
 .btn {

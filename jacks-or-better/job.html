@@ -165,7 +165,7 @@
           <div class="bet-units" id="betUnitsLabel">BET 1</div>
           <button class="btn gold" id="denomBtn" type="button">DENOM $1</button>
         </div>
-        <div class="bankroll-display" id="bankrollDisplay">BANKROLL $100.00</div>
+        <button class="bankroll-display" id="bankrollDisplay" type="button">CREDIT $100.00</button>
       </section>
 
       <section class="controls-row">
@@ -204,6 +204,16 @@
       <button class="btn gold stats-reset" id="resetStatsBtn" type="button">RESET STATS</button>
     </aside>
   </main>
+
+  <div class="modal-backdrop" id="creditModal" aria-hidden="true">
+    <div class="modal">
+      <h2>Set Credits</h2>
+      <label class="modal-label" for="creditInput">CREDIT AMOUNT</label>
+      <input class="modal-input" id="creditInput" type="number" min="0" step="0.01" inputmode="decimal">
+      <div class="modal-error" id="creditError">ENTER A POSITIVE NUMBER.</div>
+      <button class="btn gold modal-confirm" id="creditConfirmBtn" type="button">CONFIRM</button>
+    </div>
+  </div>
 
   <script src="game.js"></script>
 </body>

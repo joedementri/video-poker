@@ -31,6 +31,10 @@ const betUpBtn = document.getElementById("betUpBtn");
 const dealBtn = document.getElementById("dealBtn");
 const cardButtons = Array.from(document.querySelectorAll(".card"));
 const payTableEl = document.getElementById("payTable");
+const creditModal = document.getElementById("creditModal");
+const creditInput = document.getElementById("creditInput");
+const creditConfirmBtn = document.getElementById("creditConfirmBtn");
+const creditError = document.getElementById("creditError");
 const statHandsEl = document.getElementById("statHands");
 const statWageredEl = document.getElementById("statWagered");
 const statWonEl = document.getElementById("statWon");
@@ -167,6 +171,7 @@ const formatMoney = (amount) => amount.toFixed(2);
 
 const updateBankroll = () => {
   bankrollDisplayEl.textContent = `CREDIT $${formatMoney(bankroll)}`;
+  fitTextToContainer(bankrollDisplayEl, 18);
 };
 
 const updateBetDisplay = () => {
@@ -212,6 +217,47 @@ const updateStatsDisplay = () => {
   if (statTripsEl) statTripsEl.textContent = handCounts["Three of a Kind"];
   if (statTwoPairEl) statTwoPairEl.textContent = handCounts["Two Pair"];
   if (statJacksEl) statJacksEl.textContent = handCounts["Jacks or Better"];
+};
+
+const openCreditModal = () => {
+  if (!creditModal || !creditInput) {
+    return;
+  }
+  creditInput.value = formatMoney(bankroll);
+  if (creditError) {
+    creditError.classList.remove("is-visible");
+  }
+  creditModal.classList.add("is-open");
+  creditModal.setAttribute("aria-hidden", "false");
+  creditInput.focus();
+  creditInput.select();
+};
+
+const closeCreditModal = () => {
+  if (!creditModal) {
+    return;
+  }
+  creditModal.classList.remove("is-open");
+  creditModal.setAttribute("aria-hidden", "true");
+};
+
+const applyCreditInput = () => {
+  if (!creditInput) {
+    return;
+  }
+  const nextValue = Number.parseFloat(creditInput.value);
+  if (!Number.isFinite(nextValue) || nextValue <= 0) {
+    if (creditError) {
+      creditError.classList.add("is-visible");
+    }
+    return;
+  }
+  if (creditError) {
+    creditError.classList.remove("is-visible");
+  }
+  bankroll = nextValue;
+  updateBankroll();
+  closeCreditModal();
 };
 
 const resetStats = () => {
@@ -277,6 +323,25 @@ const countBits = (mask) => {
     value >>= 1;
   }
   return count;
+};
+
+const fitTextToContainer = (element, minSizePx) => {
+  if (!element) {
+    return;
+  }
+  element.style.fontSize = "";
+  let fontSize = parseFloat(window.getComputedStyle(element).fontSize);
+  const minSize = minSizePx || 18;
+  if (!Number.isFinite(fontSize)) {
+    return;
+  }
+  const maxTries = 20;
+  let tries = 0;
+  while (element.scrollWidth > element.clientWidth && fontSize > minSize && tries < maxTries) {
+    fontSize -= 1;
+    element.style.fontSize = `${fontSize}px`;
+    tries += 1;
+  }
 };
 
 const countCombinations = (n, k) => {
@@ -522,6 +587,29 @@ resetStatsBtn.addEventListener("click", () => {
   resetStats();
 });
 
+bankrollDisplayEl.addEventListener("click", () => {
+  openCreditModal();
+});
+
+creditConfirmBtn.addEventListener("click", () => {
+  applyCreditInput();
+});
+
+creditInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    applyCreditInput();
+  }
+  if (event.key === "Escape") {
+    closeCreditModal();
+  }
+});
+
+creditModal.addEventListener("click", (event) => {
+  if (event.target === creditModal) {
+    closeCreditModal();
+  }
+});
+
 dealBtn.addEventListener("click", () => {
   handleDeal();
 });
@@ -531,3 +619,7 @@ updateBetDisplay();
 updateBankroll();
 updateWinDisplay(0);
 updateStatsDisplay();
+
+window.addEventListener("resize", () => {
+  fitTextToContainer(bankrollDisplayEl, 18);
+});
