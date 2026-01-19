@@ -61,8 +61,8 @@
             corner.className = "card__corner";
             corner.innerHTML = `${rankLabel}<span>${suitSymbol}</span>`;
             const center = document.createElement("div");
-            center.className = isJoker ? "card__center card__center--joker" : "card__center";
-            center.textContent = isJoker ? "JOKER" : suitSymbol;
+            center.className = "card__center";
+            center.textContent = suitSymbol;
             const label = document.createElement("div");
             label.className = "card__label";
             label.textContent = suitLabel;
@@ -89,7 +89,7 @@
 
         jokers.forEach((joker, index) => {
             const card = createCard({
-                rankLabel: "★",
+                rankLabel: "JOKER",
                 suitLabel: joker.label,
                 suitSymbol: joker.symbol,
                 color: joker.color,
@@ -101,3 +101,4 @@
     </script>
 </body>
 </html>
+

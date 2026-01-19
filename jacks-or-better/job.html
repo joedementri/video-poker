@@ -9,7 +9,7 @@
 <body>
   <main class="table-wrap">
     <section class="paytable">
-      <table>
+      <table id="payTable">
         <thead>
           <tr>
             <th>Bet Amount</th>
@@ -109,6 +109,7 @@
           </span>
           <span class="card-back"></span>
         </span>
+        <span class="best-label">BEST HOLD</span>
       </button>
       <button class="card" data-index="1" type="button" aria-label="Card 2">
         <span class="held-label">HELD</span>
@@ -119,6 +120,7 @@
           </span>
           <span class="card-back"></span>
         </span>
+        <span class="best-label">BEST HOLD</span>
       </button>
       <button class="card" data-index="2" type="button" aria-label="Card 3">
         <span class="held-label">HELD</span>
@@ -129,6 +131,7 @@
           </span>
           <span class="card-back"></span>
         </span>
+        <span class="best-label">BEST HOLD</span>
       </button>
       <button class="card" data-index="3" type="button" aria-label="Card 4">
         <span class="held-label">HELD</span>
@@ -139,6 +142,7 @@
           </span>
           <span class="card-back"></span>
         </span>
+        <span class="best-label">BEST HOLD</span>
       </button>
       <button class="card" data-index="4" type="button" aria-label="Card 5">
         <span class="held-label">HELD</span>
@@ -149,6 +153,7 @@
           </span>
           <span class="card-back"></span>
         </span>
+        <span class="best-label">BEST HOLD</span>
       </button>
     </section>
 
@@ -162,7 +167,10 @@
     </section>
 
     <section class="controls-row">
-      <button class="btn gold" id="speedBtn" type="button">SPEED: SLOW</button>
+      <div class="control-stack">
+        <button class="btn gold" id="speedBtn" type="button">SPEED: SLOW</button>
+        <button class="btn gold" id="bestPlayBtn" type="button">SHOW BEST PLAY</button>
+      </div>
       <button class="btn gold" id="betUpBtn" type="button">BET UP</button>
       <button class="btn gold" id="dealBtn" type="button">DEAL</button>
     </section>

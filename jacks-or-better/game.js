@@ -26,9 +26,11 @@ const betUnitsLabelEl = document.getElementById("betUnitsLabel");
 const denomBtn = document.getElementById("denomBtn");
 const bankrollDisplayEl = document.getElementById("bankrollDisplay");
 const speedBtn = document.getElementById("speedBtn");
+const bestPlayBtn = document.getElementById("bestPlayBtn");
 const betUpBtn = document.getElementById("betUpBtn");
 const dealBtn = document.getElementById("dealBtn");
 const cardButtons = Array.from(document.querySelectorAll(".card"));
+const payTableEl = document.getElementById("payTable");
 
 let deck = [];
 let hand = [];
@@ -39,6 +41,7 @@ let denomIndex = 0;
 const denomOptions = [1, 5, 10, 25];
 let bankroll = 100;
 let flipSpeed = 450;
+let showBestPlay = false;
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -137,6 +140,12 @@ const updateBankroll = () => {
 const updateBetDisplay = () => {
   betUnitsLabelEl.textContent = `BET ${betUnits}`;
   denomBtn.textContent = `DENOM $${denomOptions[denomIndex]}`;
+  if (payTableEl) {
+    payTableEl.dataset.bet = String(betUnits);
+  }
+  if (showBestPlay && phase === "dealt") {
+    updateBestPlay();
+  }
 };
 
 const updateWinDisplay = (amount) => {
@@ -186,6 +195,138 @@ const flipCardDown = async (index, delay) => {
   cardButtons[index].classList.remove("face-up");
 };
 
+const getPayoutUnits = (cards) => {
+  const result = evaluateHand(cards);
+  return PAY_TABLE[result] ? PAY_TABLE[result][betUnits - 1] : 0;
+};
+
+const countBits = (mask) => {
+  let count = 0;
+  let value = mask;
+  while (value) {
+    count += value & 1;
+    value >>= 1;
+  }
+  return count;
+};
+
+const countCombinations = (n, k) => {
+  if (k < 0 || k > n) {
+    return 0;
+  }
+  let result = 1;
+  for (let i = 1; i <= k; i += 1) {
+    result = (result * (n - k + i)) / i;
+  }
+  return result;
+};
+
+const sampleDraw = (cards, drawCount) => {
+  const chosen = new Set();
+  const drawn = [];
+  while (drawn.length < drawCount) {
+    const index = Math.floor(Math.random() * cards.length);
+    if (!chosen.has(index)) {
+      chosen.add(index);
+      drawn.push(cards[index]);
+    }
+  }
+  return drawn;
+};
+
+const forEachCombination = (n, k, callback) => {
+  if (k === 0) {
+    callback([]);
+    return;
+  }
+  const indices = Array.from({ length: k }, (_, i) => i);
+  while (true) {
+    callback(indices);
+    let i = k - 1;
+    while (i >= 0 && indices[i] === n - k + i) {
+      i -= 1;
+    }
+    if (i < 0) {
+      break;
+    }
+    indices[i] += 1;
+    for (let j = i + 1; j < k; j += 1) {
+      indices[j] = indices[j - 1] + 1;
+    }
+  }
+};
+
+const getBestHoldMask = (cards, remainingDeck) => {
+  const exactThreshold = 6000;
+  const sampleCount = 2500;
+  let bestMask = 0;
+  let bestEv = -1;
+  let bestHeldCount = -1;
+
+  for (let mask = 0; mask < 32; mask += 1) {
+    const heldCards = [];
+    for (let i = 0; i < 5; i += 1) {
+      if (mask & (1 << i)) {
+        heldCards.push(cards[i]);
+      }
+    }
+    const drawCount = 5 - heldCards.length;
+    let total = 0;
+    let combos = 0;
+    const totalCombos = countCombinations(remainingDeck.length, drawCount);
+
+    if (drawCount === 0) {
+      total = getPayoutUnits(heldCards);
+      combos = 1;
+    } else {
+      if (totalCombos <= exactThreshold) {
+        forEachCombination(remainingDeck.length, drawCount, (combo) => {
+          const drawn = combo.map((index) => remainingDeck[index]);
+          const testHand = heldCards.concat(drawn);
+          total += getPayoutUnits(testHand);
+          combos += 1;
+        });
+      } else {
+        const samples = Math.min(sampleCount, totalCombos);
+        for (let i = 0; i < samples; i += 1) {
+          const drawn = sampleDraw(remainingDeck, drawCount);
+          const testHand = heldCards.concat(drawn);
+          total += getPayoutUnits(testHand);
+        }
+        combos = samples;
+      }
+    }
+
+    const ev = combos > 0 ? total / combos : 0;
+    const heldCount = heldCards.length;
+    if (ev > bestEv || (Math.abs(ev - bestEv) < 1e-9 && heldCount > bestHeldCount)) {
+      bestEv = ev;
+      bestMask = mask;
+      bestHeldCount = heldCount;
+    }
+  }
+
+  return bestMask;
+};
+
+const clearBestHolds = () => {
+  cardButtons.forEach((card) => card.classList.remove("best-hold"));
+};
+
+const updateBestPlay = () => {
+  if (!showBestPlay || phase !== "dealt") {
+    clearBestHolds();
+    return;
+  }
+  const bestMask = getBestHoldMask(hand, deck);
+  clearBestHolds();
+  for (let i = 0; i < 5; i += 1) {
+    if (bestMask & (1 << i)) {
+      cardButtons[i].classList.add("best-hold");
+    }
+  }
+};
+
 const handleDeal = async () => {
   if (phase === "dealing" || phase === "drawing") {
     return;
@@ -206,6 +347,7 @@ const handleDeal = async () => {
   updateBankroll();
   updateWinDisplay(0);
   updateHandName("");
+  clearBestHolds();
   held = [false, false, false, false, false];
   resetCardVisuals();
 
@@ -220,11 +362,12 @@ const handleDeal = async () => {
     await flipCardUp(i, delayStep);
   }
 
-  const firstResult = evaluateHand(hand);
-  updateHandName(PAY_TABLE[firstResult] ? firstResult : "");
-
   phase = "dealt";
   dealBtn.textContent = "DRAW";
+
+  const firstResult = evaluateHand(hand);
+  updateHandName(PAY_TABLE[firstResult] ? firstResult : "");
+  updateBestPlay();
 };
 
 const handleDraw = async () => {
@@ -248,6 +391,7 @@ const handleDraw = async () => {
   updateBankroll();
   updateWinDisplay(payout);
   updateHandName(payout > 0 ? result : "");
+  clearBestHolds();
 
   phase = "drawn";
   dealBtn.textContent = "DEAL";
@@ -287,6 +431,12 @@ speedBtn.addEventListener("click", () => {
     setFlipSpeed(450);
     speedBtn.textContent = "SPEED: SLOW";
   }
+});
+
+bestPlayBtn.addEventListener("click", () => {
+  showBestPlay = !showBestPlay;
+  bestPlayBtn.textContent = showBestPlay ? "HIDE BEST PLAY" : "SHOW BEST PLAY";
+  updateBestPlay();
 });
 
 dealBtn.addEventListener("click", () => {

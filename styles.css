@@ -86,9 +86,7 @@ h1 {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
     min-height: 160px;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    aspect-ratio: 5 / 7;
     border: 2px solid rgba(13, 27, 42, 0.2);
 }
 
@@ -103,35 +101,43 @@ h1 {
 }
 
 .card__corner {
-    font-size: 1.1rem;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
     font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
+    line-height: 1;
+}
+
+.card--joker .card__corner {
+    font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+    letter-spacing: 0.08em;
 }
 
 .card__corner--bottom {
-    transform: rotate(180deg);
-    align-self: flex-end;
+    display: none;
+}
+
+.card__corner span {
+    display: none;
 }
 
 .card__center {
-    text-align: center;
-    font-size: 2.2rem;
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(3rem, 6vw, 4.6rem);
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
 }
 
 .card__center--joker {
-    font-size: 1.4rem;
+    font-size: clamp(1.6rem, 3.2vw, 2.2rem);
     letter-spacing: 0.12em;
     text-transform: uppercase;
 }
 
 .card__label {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.7;
-    text-align: center;
+    display: none;
 }
