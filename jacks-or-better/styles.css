@@ -210,6 +210,11 @@ body {
   opacity: 1;
 }
 
+.card.held .card-front,
+.card.held .card-back {
+  box-shadow: 0 0 0 2px rgba(199, 162, 26, 0.9), 0 0 12px rgba(199, 162, 26, 0.35);
+}
+
 .best-label {
   position: absolute;
   bottom: -34px;
