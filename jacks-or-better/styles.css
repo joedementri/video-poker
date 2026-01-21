@@ -468,4 +468,97 @@ body {
   .controls-row {
     grid-template-columns: 1fr;
   }
+
+  .paytable {
+    overflow-x: auto;
+  }
+
+  .paytable table {
+    min-width: 520px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  .table-wrap {
+    gap: 22px;
+  }
+
+  .cards-row {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 20px;
+    row-gap: 30px;
+    padding-bottom: 32px;
+  }
+
+  .card {
+    max-width: 150px;
+  }
+
+  .held-label {
+    top: -22px;
+    font-size: 0.8rem;
+  }
+
+  .best-label {
+    bottom: -32px;
+    font-size: 0.8rem;
+  }
+
+  .status-row {
+    gap: 16px;
+  }
+
+  .controls-row {
+    gap: 16px;
+  }
+
+  .stats-panel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .layout-grid {
+    width: 100%;
+  }
+
+  .table-wrap {
+    width: 100%;
+  }
+
+  .paytable {
+    padding: 10px 12px;
+  }
+
+  .paytable table {
+    min-width: 0;
+    font-size: 0.8rem;
+  }
+
+  .paytable th,
+  .paytable td {
+    padding: 4px 6px;
+  }
+
+  .cards-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    row-gap: 28px;
+  }
+
+  .card {
+    max-width: 140px;
+  }
+
+  .controls-row {
+    grid-template-columns: 1fr;
+  }
 }
