@@ -1,0 +1,584 @@
+:root {
+  --felt-dark: #062e23;
+  --felt-mid: #0a4a36;
+  --felt-light: #0f6a4d;
+  --gold: #c7a21a;
+  --gold-deep: #8d7310;
+  --black: #0c0b08;
+  --red: #b10d0d;
+  --card: #f1eadb;
+  --card-edge: #14120e;
+  --white: #f6f5f2;
+  --flip-duration: 450ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--white);
+  font-family: "Garamond", "Palatino Linotype", "Times New Roman", serif;
+  background: radial-gradient(circle at top, #0b1c2d, #02080f);
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.layout-grid {
+  width: min(1600px, 100%);
+  display: grid;
+  grid-template-columns: minmax(40px, 1fr) minmax(860px, 2fr) minmax(260px, 0.9fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.spacer {
+  min-height: 1px;
+}
+
+.table-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  justify-self: center;
+}
+
+.paytable {
+  background: rgba(0, 0, 0, 0.45);
+  border: 2px solid var(--gold-deep);
+  border-radius: 12px;
+  padding: 12px 18px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: "ITC Bookman", "Bookman Old Style", "Bookman", "Palatino Linotype", serif;
+  font-weight: 400;
+}
+
+.paytable table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.paytable th,
+.paytable td {
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.paytable table[data-bet="1"] th:nth-child(2),
+.paytable table[data-bet="1"] td:nth-child(2),
+.paytable table[data-bet="2"] th:nth-child(3),
+.paytable table[data-bet="2"] td:nth-child(3),
+.paytable table[data-bet="3"] th:nth-child(4),
+.paytable table[data-bet="3"] td:nth-child(4),
+.paytable table[data-bet="4"] th:nth-child(5),
+.paytable table[data-bet="4"] td:nth-child(5),
+.paytable table[data-bet="5"] th:nth-child(6),
+.paytable table[data-bet="5"] td:nth-child(6) {
+  background: rgba(199, 162, 26, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(199, 162, 26, 0.35);
+}
+
+.paytable th:first-child,
+.paytable td:first-child {
+  text-align: left;
+  width: 40%;
+}
+
+.hand-name {
+  font-family: "Piegnot", "Impact", "Haettenschweiler", "Arial Black", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  text-align: center;
+  color: var(--red);
+  -webkit-text-stroke: 2px var(--gold);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  min-height: 3.6rem;
+}
+
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 22px;
+  justify-items: center;
+  padding-bottom: 16px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 5 / 7;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.card:disabled {
+  cursor: default;
+}
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transition: transform var(--flip-duration) ease;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+}
+
+.card.face-up .card-inner {
+  transform: rotateY(0deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  border: 2px solid var(--card-edge);
+}
+
+.card-front {
+  background: var(--card);
+  color: var(--black);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transform: rotateY(0deg);
+}
+
+.card-front .rank {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1;
+}
+
+.card-front .suit {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(3.6rem, 7.5vw, 5.8rem);
+  line-height: 1;
+}
+
+.card-front .wild-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-size: clamp(1.4rem, 3.8vw, 2.4rem);
+  font-weight: 800;
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px #000000;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.card.red-suit .card-front {
+  color: #b41515;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #1a1a1a, #000 60%);
+  color: var(--gold);
+  transform: rotateY(180deg);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.card-back::after {
+  content: "Video Poker";
+  font-size: 0.75rem;
+}
+
+.held-label {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--white);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.card.held .held-label {
+  opacity: 1;
+}
+
+.card.held .card-front,
+.card.held .card-back {
+  box-shadow: 0 0 0 2px rgba(199, 162, 26, 0.9), 0 0 12px rgba(199, 162, 26, 0.35);
+}
+
+.best-label {
+  position: absolute;
+  bottom: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #74c7ff;
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.card.best-hold .best-label {
+  opacity: 1;
+}
+
+.status-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+}
+
+.win-display,
+.bankroll-display {
+  font-family: "Piegnot", "Impact", "Haettenschweiler", "Arial Black", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  color: var(--red);
+  -webkit-text-stroke: 2px var(--gold);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.win-display {
+  text-align: left;
+}
+
+.bankroll-display {
+  text-align: right;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  justify-self: end;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.bet-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.bet-units {
+  color: var(--white);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.controls-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 22px;
+}
+
+.control-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stats-panel {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--gold-deep);
+  border-radius: 14px;
+  padding: 18px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stats-panel h2,
+.stats-panel h3 {
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "ITC Bookman", "Bookman Old Style", "Bookman", "Palatino Linotype", serif;
+  color: var(--gold);
+}
+
+.stats-panel h3 {
+  margin-top: 18px;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-row span:last-child {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.stats-reset {
+  margin-top: 6px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+  z-index: 1000;
+}
+
+.modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: rgba(8, 12, 20, 0.95);
+  border: 2px solid var(--gold-deep);
+  border-radius: 12px;
+  padding: 20px 24px;
+  width: min(360px, 90vw);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--white);
+  text-align: center;
+}
+
+.modal h2 {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: "ITC Bookman", "Bookman Old Style", "Bookman", "Palatino Linotype", serif;
+  color: var(--gold);
+}
+
+.modal-label {
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.modal-input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #101723;
+  color: var(--white);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.modal-error {
+  color: #e14a4a;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  opacity: 0;
+  min-height: 1rem;
+  transition: opacity 120ms ease;
+  text-transform: uppercase;
+}
+
+.modal-error.is-visible {
+  opacity: 1;
+}
+
+.modal-confirm {
+  align-self: center;
+  width: 100%;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 2px solid var(--gold-deep);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.btn.gold {
+  background: var(--gold);
+  color: var(--black);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.btn.gold:hover {
+  transform: translateY(-2px);
+}
+
+.btn.gold:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 900px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .stats-panel {
+    order: 3;
+  }
+
+  .cards-row {
+    grid-template-columns: repeat(2, minmax(130px, 1fr));
+  }
+
+  .status-row {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .bankroll-display,
+  .win-display {
+    text-align: center;
+  }
+
+  .controls-row {
+    grid-template-columns: 1fr;
+  }
+
+  .paytable {
+    overflow-x: auto;
+  }
+
+  .paytable table {
+    min-width: 520px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  .table-wrap {
+    gap: 22px;
+  }
+
+  .cards-row {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 20px;
+    row-gap: 30px;
+    padding-bottom: 32px;
+  }
+
+  .card {
+    max-width: 150px;
+  }
+
+  .held-label {
+    top: -22px;
+    font-size: 0.8rem;
+  }
+
+  .best-label {
+    bottom: -32px;
+    font-size: 0.8rem;
+  }
+
+  .status-row {
+    gap: 16px;
+  }
+
+  .controls-row {
+    gap: 16px;
+  }
+
+  .stats-panel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 12px;
+  }
+
+  .layout-grid {
+    width: 100%;
+  }
+
+  .table-wrap {
+    width: 100%;
+  }
+
+  .paytable {
+    padding: 10px 12px;
+  }
+
+  .paytable table {
+    min-width: 0;
+    font-size: 0.8rem;
+  }
+
+  .paytable th,
+  .paytable td {
+    padding: 4px 6px;
+  }
+
+  .cards-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    row-gap: 28px;
+  }
+
+  .card {
+    max-width: 140px;
+  }
+
+  .controls-row {
+    grid-template-columns: 1fr;
+  }
+}
